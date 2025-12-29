@@ -1,0 +1,3 @@
+dataset	uid	path_protein	path_ligand
+MOAD_train	4fch_1_superlig_0	BindingMOAD_2020_processed/pdb_protein/4fch_1_protein.pdb	BindingMOAD_2020_processed/pdb_superligand/4fch_1_superlig_0.pdb
+PDBBind_train	3dpf	PDBBind_processed/3dpf/3dpf_protein_processed.pdb	PDBBind_processed/3dpf/3dpf_ligand.sdf

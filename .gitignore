@@ -1,0 +1,3 @@
+# Large files (exceeding GitHub 100MB limit)
+similarity_scores/pocket_scores.tsv
+similarity_scores/tanimoto_distances.csv

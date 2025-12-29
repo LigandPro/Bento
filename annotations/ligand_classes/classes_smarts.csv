@@ -1,0 +1,36 @@
+major_group,local_group,smarts
+"Amino-acids, peptides and peptide-like",alpha_amino_acids,"[OH1][CX3](=[OX1])[CX4;!H0]([#1,#6])[NH2,$([NH1]([#6])[#6])&!$([NH1](CC(=O)[OH1])[CX3]=[OX1,SX1])]"
+"Nucleosides, nucleotides and nucleotide-like",pyrimidine-nucleotide,"[#7,#8]1C(COP)C(O)CC1-[#7]2~[#6]~[#6]~[#6]~[#7]~[#6](=[#8])2"
+"Nucleosides, nucleotides and nucleotide-like",purine-nucleotide,"[#7,#8]1C(COP)C(O)CC1-[#7]2~[#6]~[#7]~[#6]3~[#6]2~[#7]~[#6]~[#7]~[#6]3"
+"Nucleosides, nucleotides and nucleotide-like",pyrimidine-nucleozide,"[#7,#8]1C(C[O][!#15])C(O)CC1-[#7]2~[#6]~[#6]~[#6]~[#7]~[#6](=[#8])2"
+"Nucleosides, nucleotides and nucleotide-like",purine-nucleozide,"[#7,#8]1C(C[O][!#15])C(O)CC1-[#7]2~[#6]~[#7]~[#6]3~[#6]2~[#7]~[#6]~[#7]~[#6]3"
+"Nucleosides, nucleotides and nucleotide-like",adenine,[#7]-[#6]1~[#7]~[#6]~[#7]~[#6]2~[#6]~1~[#7]~[#6]~[#7]~2
+"Nucleosides, nucleotides and nucleotide-like",guanine,[#7]-[#6]1~[#7]~[#6](~[#6]2~[#6](~[#7]~1)~[#7]~[#6]~[#7]~2)=[#8]
+"Nucleosides, nucleotides and nucleotide-like",cytosine,[#8]=[#6]1~[#7]~[#6](-[#7])~[#6]~[#6]~[#7]~1
+"Nucleosides, nucleotides and nucleotide-like",thymine,[#8]=[#6]1~[#7]~[#6H]~[#6](-[CH3])~[#6](=[#8])~[#7]~1
+"Nucleosides, nucleotides and nucleotide-like",uracil,[#8]=[#6]1~[#7]~[#6H]~[#6H]~[#6](=[#8])~[#7]~1
+Saccharide-like,aldose pyranose,"[#7,#8]1C([#7,#8])C([#7,#8])C([#7,#8])C([#7,#8])C(CO)1"
+Saccharide-like,ketose pyranose,"[#7,#8]1C(CO)C([#7,#8])C([#7,#8])C([#7,#8])C1"
+Saccharide-like,pentose pyranose,"[#7,#8]1C([#7,#8])C([#7,#8])C([#7,#8])C([#7,#8])[CH2]1"
+Saccharide-like,ketose furanose,"[#7,#8]1C([#7,#8])(CO)C([#7,#8])C([#7,#8])C(CO)1"
+Saccharide-like,aldose furanose,"[#7,#8]1C([#7,#8])C([#7,#8])C([#7,#8])C(C(O)CO)1"
+Saccharide-like,pentose furanose,"[#7,#8]1C([#7,#8])C([#7,#8])C([#7,#8])C(CO)1"
+Saccharide-like,desoxy-pentose furanose,"[#7,#8]1C([#7,#8])[#6H2]C([#7,#8])C(CO)1"
+Macrocycles,cycles with >7 members,[r;!r3;!r4;!r5;!r6;!r7]
+"Lipid-like, steroids, organometallics, organoelements",fatty acids/esters (>8 carbons chain),[O][#6](=[O])~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]
+"Lipid-like, steroids, organometallics, organoelements",triglyceride (ester),[#6]([O][#6](=[O])~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R])[#6]([O][#6](=[O])~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R])[#6]([O][#6](=[O])~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R])
+"Lipid-like, steroids, organometallics, organoelements",triglyceride (ether),[#6]([O][#6X4;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R])[#6]([O][#6X4;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6])[#6]([O][#6X4;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6])
+"Lipid-like, steroids, organometallics, organoelements",phospholipid,[#6]([O][P](=[O])([O])[O])[#6]([O][#6](=[O])~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R])[#6]([O][#6](=[O])~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R])
+"Lipid-like, steroids, organometallics, organoelements",lipide-like,"[#6]([#6,#7,#8,#16][$(C=O),$(C)]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R])[#6]([#6,#7,#8,#16][$(C=O),$(C)]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R]~[#6;!R])[#6][#6,#7,#8,#16]"
+"Lipid-like, steroids, organometallics, organoelements",steroids,[#6]12~[#6]~[#6]~[#6]~[#6]~[#6]~1~[#6]1~[#6](~[#6]3~[#6]~[#6]~[#6]~[#6]~3~[#6]~[#6]~1)~[#6]~[#6]~2
+"Lipid-like, steroids, organometallics, organoelements",organometallics,"[#6].[#6].[Li,Na,K,Cu,Ag,Au,Mg,Ca,Zn,Sr,Cd,Hg,Ba,Al,Ti,Zr,Nb,Mo,Rh,Os,Ir,Cr,Mn,Fe,Co,Ni,Pd,Pt,V,Re,Ru]"
+"Lipid-like, steroids, organometallics, organoelements",organoelements,"[#6][!#1;!#6;!#7;!#8;!#16;!F;!Cl;!Br;!I]"
+Cofactors,hem-like,[#6]1(~[#6]~[#6]2~[#7]~[#6](~[#6]~[#6]3~[#7]~[#6](~[#6]~[#6](~[#7]4)~[#6]~[#6]~[#6]4~[#6]5)~[#6]~[#6]3)~[#6]~[#6]2)~[#6]~[#6]~[#6]5~[#7]1
+Cofactors,biotin-like,[#8]=[#6]1~[#7]~[#6]2~[#6](~[#6]~[#16]~[#6]2~[#6]~[#6]~[#6]~[#6]~[#6](~[#8])=[#8])~[#7]1
+Cofactors,B6-like,[#8]=[#6]~[#6]1~[#6](~[O])~[#6](~[C])~[#7]~[#6]~[#6]1~[#6]~[#8]~[#15]([#8])(=[#8])[#8]
+Cofactors,flavin-like,[#6]12~[#6]~[#6](~[#6])~[#6](~[#6])~[#6]~[#6]1~[#7]~[#6]3~[#6](~[#7]~[#6](=O)~[#7]~[#6](=O)3)~[#7]2
+Cofactors,FMN-like,[#6]12~[#6]~[#6](~[#6])~[#6](~[#6])~[#6]~[#6]1~[#7]~[#6]3~[#6](~[#7]~[#6](=O)~[#7]~[#6](=O)3)~[#7]2~[#6]~[#6](O)~[#6](O)~[#6](O)~[#6]OP(=O)(O)O
+Cofactors,nicotin-like,"[cR1]1:[cR1]:[cR1]:[nD2,n+D3]:[cR1]:[cR1]1[$(C(=O)[#6]),$(C(=O)[#7]),$(C2CCCN2C)]"
+Cofactors,quinone-like,[#8]=[#6]1[#6]=[#6][#6](=[#8])[#6]=[#6]1
+Cofactors,glutathione-like,O=C(O)C([#7])CCC(=O)NC(C[#16])C(=O)NCC(=O)O
+spiro,spiro,[C;R]@[C;R2](@[C;R])(@[C;R])@[C;R]

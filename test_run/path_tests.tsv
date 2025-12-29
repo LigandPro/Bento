@@ -1,0 +1,4 @@
+dataset	uid	path_protein	path_ligand
+timesplit_test	6k2n	PDBBind_processed/6k2n/6k2n_protein_processed.pdb	PDBBind_processed/6k2n/6k2n_ligand.sdf
+astex_diverse_set_ids	1G9V_RQ3	posebusters/astex_diverse_set/1G9V_RQ3/1G9V_RQ3_protein.pdb	posebusters/astex_diverse_set/1G9V_RQ3/1G9V_RQ3_ligand.sdf
+dockgen_test	5u82_2_ZN0_0	dockgen_set/5u82_2_ZN0_0/5u82_2_ZN0_0_protein_processed.pdb	dockgen_set/5u82_2_ZN0_0/5u82_2_ZN0_0_ligand.pdb
