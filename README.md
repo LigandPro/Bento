@@ -1,5 +1,10 @@
 # Bento
 
+[![CI](https://github.com/LigandPro/Bento/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/LigandPro/Bento/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.10--3.12-blue)
+![uv](https://img.shields.io/badge/env-uv-5C4EE5)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/LigandPro/Bento/blob/main/LICENSE)
+
 Bento is a benchmark repository for evaluating protein-ligand docking methods across curated datasets and prediction outputs.
 
 ## Highlights
