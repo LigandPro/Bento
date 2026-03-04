@@ -1,4 +1,4 @@
-'''
+"""
 Input:
 - A dataset of complexes containing a column `path_ligand` with paths to ligand files.
 
@@ -15,18 +15,19 @@ Test run:
 python3 01_generate_ligands_annotation.py \
   --dataset_file ../test_run/path_train.tsv \
   --output_dir ../test_run/outputs
-'''
+"""
+
+import argparse
+import os
+from collections import defaultdict
+from typing import List, Set, Tuple
 
 import pandas as pd
+import psutil
+from config import databases_dir, wrk_dir
 from pandarallel import pandarallel
 from rdkit import Chem
-from typing import List, Tuple, Set
-from collections import defaultdict
-import psutil
 from rdkit.Chem import Descriptors
-import os
-import argparse
-from config import wrk_dir, databases_dir
 
 smarts_path = os.path.join(wrk_dir, "annotations/ligand_classes/classes_smarts.csv")
 SMARTS_DF = pd.read_csv(smarts_path)
@@ -36,18 +37,20 @@ COMPILED_SMARTS = {}
 print("Pre-compiling SMARTS patterns...")
 for _, row in SMARTS_DF.iterrows():
     try:
-        compiled_smarts = Chem.MolFromSmarts(row['smarts'])
-        COMPILED_SMARTS[row['local_group']] = compiled_smarts
+        compiled_smarts = Chem.MolFromSmarts(row["smarts"])
+        COMPILED_SMARTS[row["local_group"]] = compiled_smarts
         if compiled_smarts is None:
             print(f"Warning: Failed to compile SMARTS {row['smarts']} for {row['local_group']}")
     except Exception as e:
         print(f"Error compiling SMARTS {row['smarts']} for {row['local_group']}: {e}")
-        COMPILED_SMARTS[row['local_group']] = None
-print(f"Compiled {len([v for v in COMPILED_SMARTS.values() if v is not None])} SMARTS patterns successfully")
+        COMPILED_SMARTS[row["local_group"]] = None
+print(
+    f"Compiled {len([v for v in COMPILED_SMARTS.values() if v is not None])} SMARTS patterns successfully"
+)
 
 
 def get_mol(path: str):
-    ext = path[path.rfind(".") + 1:]
+    ext = path[path.rfind(".") + 1 :]
     if ext == "pdb":
         mol = Chem.MolFromPDBFile(path)
     elif ext == "sdf":
@@ -114,7 +117,9 @@ def _find_peptide_chains(peptide_graph: defaultdict) -> List[List[int]]:
     return chains
 
 
-def _get_longest_path_from_unit(peptide_graph: defaultdict, start_unit: int, visited: Set[int]) -> List[int]:
+def _get_longest_path_from_unit(
+    peptide_graph: defaultdict, start_unit: int, visited: Set[int]
+) -> List[int]:
     def _dfs_longest_path(current: int, path: List[int], current_visited: Set[int]) -> List[int]:
         longest = path[:]
         for neighbor in peptide_graph[current]:
@@ -135,10 +140,7 @@ def _get_longest_path_from_unit(peptide_graph: defaultdict, start_unit: int, vis
 
 def analyze_peptide_content(mol: Chem.Mol) -> dict:
     max_length, chains = find_peptide_chain_length(mol)
-    return {
-        'is_peptide_like': max_length >= 2,
-        'is_long_peptide': max_length >= 5
-    }
+    return {"is_peptide_like": max_length >= 2, "is_long_peptide": max_length >= 5}
 
 
 def is_aromatic_condensed_system(mol: Chem.Mol, min_rings: int = 2) -> bool:
@@ -159,7 +161,7 @@ def is_aromatic_condensed_system(mol: Chem.Mol, min_rings: int = 2) -> bool:
 
     condensed_count = 0
     for i, ring1 in enumerate(aromatic_rings):
-        for ring2 in aromatic_rings[i + 1:]:
+        for ring2 in aromatic_rings[i + 1 :]:
             if len(set(ring1) & set(ring2)) >= 2:
                 condensed_count += 1
 
@@ -196,7 +198,7 @@ def process_in_batches(df: pd.DataFrame, batch_size: int = 1000) -> pd.DataFrame
     total_batches = (len(df) - 1) // batch_size + 1
 
     for i in range(0, len(df), batch_size):
-        batch = df.iloc[i:i + batch_size].copy()
+        batch = df.iloc[i : i + batch_size].copy()
         batch_num = i // batch_size + 1
         print(f"Processing batch {batch_num}/{total_batches}")
 
@@ -213,7 +215,11 @@ def process_in_batches(df: pd.DataFrame, batch_size: int = 1000) -> pd.DataFrame
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset_file", required=True, help="Input dataset TSV file")
-    parser.add_argument("--output_dir", required=True, help="Output directory to save result file ligand_classes.tsv")
+    parser.add_argument(
+        "--output_dir",
+        required=True,
+        help="Output directory to save result file ligand_classes.tsv",
+    )
     args = parser.parse_args()
 
     os.makedirs(args.output_dir, exist_ok=True)
@@ -237,7 +243,7 @@ def main():
     print("Cleaning up and saving results...")
     df = df.drop(columns=["mol"])
     output_path = os.path.join(args.output_dir, f"ligand_classes_{suffix}.tsv")
-    df.to_csv(output_path, index=False, sep='\t')
+    df.to_csv(output_path, index=False, sep="\t")
 
     print(f"Results saved to {output_path}")
     print("Processing completed successfully!")

@@ -1,134 +1,152 @@
 # Bento
 
-A comprehensive benchmark for evaluating protein-ligand docking methods, featuring predictions from 20+ state-of-the-art docking algorithms including both machine learning-based and traditional approaches.
+Bento is a benchmark repository for evaluating protein-ligand docking methods across curated datasets and prediction outputs.
 
-## Overview
+## Highlights
 
-Bento provides a unified framework for analyzing and comparing molecular docking methods on standardized datasets. The benchmark includes predictions from modern ML-based methods (AlphaFold3, Boltz, Chai, DiffDock, NeuralPlexer, etc.) and established classical methods (AutoDock Vina, Smina, Gnina, etc.).
+- Unified benchmark assets for ML and classical docking methods.
+- Legacy analysis pipeline preserved in `scripts/`.
+- UV-first workflow for local development and CI.
+- Reproducibility and HPC execution notes.
 
-## Repository Structure
+## Repository Layout
 
-```
+```text
 bento/
-├── annotated_ligands/       # Train and test datasets with ligand annotations
-├── annotations/             # Ligand property annotations
-│   ├── ligand_classes/      # Ligand classification data (cofactors, saccharides, etc.)
-│   ├── buried_frac.json     # Buried fraction annotations
-│   ├── molecular_weight.json
-│   ├── num_atoms.json
-│   ├── num_chains.json
-│   └── num_rotbonds.json
-├── datasets/                # Benchmark datasets (MOAD, PDBbind, Astex, PoseBusters, etc.)
-├── predictions_full_raw/    # Raw predictions from all docking methods
-├── scripts/                 # Analysis and annotation pipeline
-└── similarity_scores/       # Pocket and ligand similarity metrics
+├── annotated_ligands/          # Train/test tables with ligand-level annotations
+├── annotations/                # Annotation maps and ligand class assets
+├── datasets/                   # Core benchmark datasets
+├── predictions_full_raw/       # Raw predictions from docking methods
+├── scripts/                    # Legacy pipeline scripts (01..04)
+├── similarity_scores/          # Similarity score artifacts
+├── src/bento/                  # Bento CLI wrapper and environment tooling
+├── tests/                      # Automated tests
+├── docs/                       # Reproducibility and HPC docs
+└── slurm/                      # Example SLURM job templates
 ```
 
-## Docking Methods Evaluated
+## Quick Start (UV)
 
-### ML-Based Methods
-- **AlphaFold3** (af3)
-- **Boltz** (multiple variants: standard, pocket-based 4Å/10Å)
-- **Chai**
-- **DiffDock**
-- **Matcha** (multiple variants: all-chains, from-true)
-- **NeuralPlexer**
-- **Uni-Mol** (standard and p2rank variants)
+### 1. Sync environment
 
-### Classical Methods
-- **AutoDock Vina** (ligand box and p2rank variants)
-- **Smina** (ligand box and p2rank variants)
-- **Gnina** (ligand box and p2rank variants)
-- **FlexAID** (FD)
-
-## Benchmark Datasets
-
-- **Astex**: Diverse protein-ligand complexes
-- **PDBbind**: Comprehensive binding affinity dataset
-- **DockGen**: Generated docking poses
-- **PoseBusters**: Challenging docking benchmark
-- **MOAD**: Mother of All Databases
-- **Timesplit test**: Temporal split for robust evaluation
-
-## Analysis Pipeline
-
-### 1. Ligand Annotation (`01_generate_ligands_annotation.py`)
-
-Generates comprehensive ligand annotations including:
-- Chemical class membership (based on SMARTS patterns)
-- Peptide-like characteristics
-- Aromatic condensed systems
-- Molecular properties (MW, atoms, rotatable bonds)
-
-**Usage:**
 ```bash
-python3 scripts/01_generate_ligands_annotation.py \
-  --dataset_file datasets/tests.tsv \
-  --output_dir outputs/
+uv sync --no-editable
 ```
 
-**Requirements:**
-- RDKit
-- pandas
-- pandarallel
+`--no-editable` is recommended to guarantee the `bento` console entrypoint is available in all Python 3.12 environments.
 
-### 2. Pocket Similarity Computation (`02_compute_pockets_similarity.py`)
+For development checks:
 
-Computes binding site similarity using GLoSA (Global-Local Structure Alignment):
-- Extracts binding pockets (4.5Å cutoff from ligand)
-- Calculates structural similarity scores
-- Supports batch processing
+```bash
+uv sync --no-editable --extra lint --extra test
+```
 
-**Requirements:**
-- PyMOL
-- GLoSA v2.2
-- Java JDK
-- g++ compiler
+For ligand annotation dependencies:
 
-### 3. Annotation Mapping (`03_map_annotations.py`)
+```bash
+uv sync --no-editable --extra annotation
+```
 
-Maps generated annotations to prediction datasets for downstream analysis.
+For pocket similarity dependencies (Linux/HPC):
 
-### 4. Visualization (`04_make_subsets_and_draw_plots.ipynb`)
+```bash
+uv sync --no-editable --extra similarity
+```
 
-Jupyter notebook for:
-- Creating dataset subsets
-- Generating comparative visualizations
-- Statistical analysis of docking performance
+### 2. Validate environment
 
-## Data Notes
+```bash
+uv run --extra annotation bento check-env --profile annotation
+uv run bento check-env --profile similarity --glosa-dir /path/to/glosa_v2.2
+```
 
-### Large Files
+### 3. Run pipeline commands
 
-The following files exceed GitHub's 100MB limit and are excluded via `.gitignore`:
-- `similarity_scores/pocket_scores.tsv` (123 MB)
-- `similarity_scores/tanimoto_distances.csv` (562 MB)
+Ligand annotation:
 
-These files contain comprehensive similarity matrices for all analyzed pockets and ligands.
+```bash
+uv run --extra annotation bento annotate-ligands \
+  --dataset-file datasets/tests.tsv \
+  --output-dir outputs/
+```
+
+Pocket similarity:
+
+```bash
+uv run bento compute-pocket-similarity \
+  --data-csv test_run/path_tests.tsv \
+  --protein-path path_protein \
+  --ligand-path path_ligand \
+  --bs-dir bs \
+  --glosa-dir /path/to/glosa_v2.2 \
+  --output-file similarity_scores/test_pocket_scores.tsv
+```
+
+Annotation mapping:
+
+```bash
+uv run bento map-annotations \
+  --tests-file datasets/tests.tsv \
+  --annotations-dir annotations \
+  --output-tests-file datasets/tests_annotated.tsv \
+  --output-tests-exploded-file datasets/tests_exploded_annotated.tsv
+```
 
 ## Configuration
 
-Edit `scripts/config.py` to set paths:
-```python
-wrk_dir = '/path/to/bento/'
-databases_dir = '/path/to/datasets/'
-glosa_path = '/path/to/glosa_v2.2/'
+Legacy scripts use environment variables:
+
+- `BENTO_WORKDIR`: repository root path (default: current repository root).
+- `BENTO_DATABASES_DIR`: root path for external dataset files (default: `BENTO_WORKDIR`).
+- `BENTO_GLOSA_DIR`: path to GLoSA directory (default: `<repo>/external/glosa`).
+- `BENTO_REPO_ROOT`: optional override for CLI location of legacy scripts.
+
+Example:
+
+```bash
+export BENTO_WORKDIR=/path/to/Bento
+export BENTO_DATABASES_DIR=/path/to/datasets
+export BENTO_GLOSA_DIR=/path/to/glosa_v2.2
 ```
 
-## Dependencies
+## External Tool Requirements
 
-Core requirements:
-- Python 3.7+
-- RDKit
-- pandas
-- pandarallel
-- PyMOL (for pocket extraction)
-- GLoSA v2.2 (for similarity computation)
-- Java JDK (for GLoSA)
+Some steps require non-Python tools:
+
+- PyMOL (for pocket extraction in script 02; installed with `--extra similarity`
+  on Linux/HPC).
+- Java JDK and `g++` (for GLoSA tooling).
+- GLoSA v2.2 executable and `AssignChemicalFeatures` class.
+
+Build GLoSA once inside your `BENTO_GLOSA_DIR`:
+
+```bash
+g++ -c glosa.cpp
+g++ -o glosa glosa.o
+javac AssignChemicalFeatures.java
+```
+
+These tools are validated by:
+
+```bash
+uv run bento check-env --profile similarity --glosa-dir /path/to/glosa_v2.2
+```
+
+## Quality Checks
+
+```bash
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest
+```
+
+## Reproducibility and HPC
+
+- Reproducibility guide: [docs/reproducibility.md](docs/reproducibility.md)
+- HPC setup: [docs/hpc.md](docs/hpc.md)
+- SLURM templates: `slurm/`
 
 ## Citation
-
-If you use this benchmark in your research, please cite:
 
 ```bibtex
 @software{bento_benchmark,
@@ -141,12 +159,4 @@ If you use this benchmark in your research, please cite:
 
 ## License
 
-[Add appropriate license information]
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit issues or pull requests.
-
-## Contact
-
-For questions or collaboration inquiries, please open an issue on GitHub.
+MIT. See [LICENSE](LICENSE).

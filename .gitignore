@@ -1,3 +1,25 @@
 # Large files (exceeding GitHub 100MB limit)
 similarity_scores/pocket_scores.tsv
 similarity_scores/tanimoto_distances.csv
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# UV / virtual environments
+.venv/
+uv.lock.bak
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Runtime outputs
+outputs/
+bs/
+
+# Local research notes
+.thoughts/
