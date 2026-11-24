@@ -35,22 +35,21 @@ In your `BENTO_GLOSA_DIR`:
 
 ```bash
 cd "$BENTO_GLOSA_DIR"
-g++ -c glosa.cpp
-g++ -o glosa glosa.o
+g++ -O3 -ffp-contract=off glosa.cpp -o glosa
 javac AssignChemicalFeatures.java
 ```
 
 ## 4. Sync Environment
 
 ```bash
-uv sync --frozen --no-editable --extra annotation --extra similarity
+uv sync --frozen --no-editable --extra annotation --extra pocket-similarity
 ```
 
 Validate toolchain:
 
 ```bash
 uv run --extra annotation bento check-env --profile annotation
-uv run bento check-env --profile similarity --glosa-dir "$BENTO_GLOSA_DIR"
+uv run --extra pocket-similarity bento check-env --profile pocket-similarity --glosa-dir "$BENTO_GLOSA_DIR"
 ```
 
 ## 5. Submit Jobs
@@ -58,7 +57,8 @@ uv run bento check-env --profile similarity --glosa-dir "$BENTO_GLOSA_DIR"
 Example templates are provided in `slurm/`:
 
 - `slurm/run_annotation.sbatch`
-- `slurm/run_similarity.sbatch`
+- `slurm/run_similarity.sbatch` (legacy single-dataset PyMOL script)
+- `slurm/run_pocket_similarity_array.sbatch` (parallel sharded two-dataset GLoSA array; see [docs/pocket-similarity.md](pocket-similarity.md))
 
 Submit:
 

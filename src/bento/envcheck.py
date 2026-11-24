@@ -45,6 +45,13 @@ def collect_checks(profile: str, glosa_dir: Path | None = None) -> list[CheckRes
     if profile in {"similarity", "full"}:
         for module_name in ("pandas", "tqdm", "pymol"):
             module_checks.append(_check_module(module_name))
+
+    if profile in {"pocket-similarity", "full"}:
+        for module_name in ("numpy", "pandas", "scipy", "Bio", "pyarrow"):
+            if all(check.name != module_name for check in module_checks):
+                module_checks.append(_check_module(module_name))
+
+    if profile in {"similarity", "pocket-similarity", "full"}:
         for binary_name in ("java", "javac", "g++"):
             binary_checks.append(_check_binary(binary_name))
         if glosa_dir is not None:

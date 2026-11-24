@@ -34,7 +34,20 @@ uv run --extra annotation bento annotate-ligands \
   --output-dir outputs/
 ```
 
-2. Pocket similarity:
+2. Pocket similarity (parallel sharded Parquet workflow; see [docs/pocket-similarity.md](pocket-similarity.md)):
+
+```bash
+uv run --extra pocket-similarity bento pocket-similarity run \
+  --dataset-tsv-1 datasets/trains.tsv \
+  --dataset-tsv-2 datasets/tests.tsv \
+  --databases-dir "$BENTO_DATABASES_DIR" \
+  --bs-dir outputs/pocket_similarity/glosa_bs_files \
+  --glosa-dir /path/to/glosa_v2.2 \
+  --output-dir outputs/pocket_similarity \
+  --workers 32
+```
+
+Legacy single-dataset pocket similarity:
 
 ```bash
 uv run bento compute-pocket-similarity \

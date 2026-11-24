@@ -26,6 +26,11 @@ annotation = [
 similarity = [
   "pymol-open-source>=3.2.0a0; platform_system == 'Linux'",
 ]
+pocket-similarity = [
+  "biopython>=1.83",
+  "pyarrow>=16.0",
+  "scipy>=1.11",
+]
 lint = [
   "ruff>=0.12.0",
 ]

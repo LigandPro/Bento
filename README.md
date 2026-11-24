@@ -52,7 +52,13 @@ For ligand annotation dependencies:
 uv sync --no-editable --extra annotation
 ```
 
-For pocket similarity dependencies (Linux/HPC):
+For parallel GLoSA pocket similarity (PyMOL-free, Parquet output):
+
+```bash
+uv sync --no-editable --extra pocket-similarity
+```
+
+For legacy PyMOL pocket similarity (Linux/HPC):
 
 ```bash
 uv sync --no-editable --extra similarity
@@ -75,7 +81,19 @@ uv run --extra annotation bento annotate-ligands \
   --output-dir outputs/
 ```
 
-Pocket similarity:
+Pocket similarity (parallel sharded, Parquet output):
+
+```bash
+uv run --extra pocket-similarity bento pocket-similarity run \
+  --dataset-tsv-1 datasets/trains.tsv \
+  --dataset-tsv-2 datasets/tests.tsv \
+  --bs-dir outputs/pocket_similarity/glosa_bs_files \
+  --glosa-dir /path/to/glosa_v2.2 \
+  --output-dir outputs/pocket_similarity \
+  --workers 32
+```
+
+Legacy pocket similarity (single-dataset PyMOL script):
 
 ```bash
 uv run bento compute-pocket-similarity \
@@ -123,11 +141,10 @@ Some steps require non-Python tools:
 - Java JDK and `g++` (for GLoSA tooling).
 - GLoSA v2.2 executable and `AssignChemicalFeatures` class.
 
-Build GLoSA once inside your `BENTO_GLOSA_DIR`:
+Build GLoSA once inside your `BENTO_GLOSA_DIR` (deterministic `-O3` flags give ~3x speedup with identical scores):
 
 ```bash
-g++ -c glosa.cpp
-g++ -o glosa glosa.o
+g++ -O3 -ffp-contract=off glosa.cpp -o glosa
 javac AssignChemicalFeatures.java
 ```
 
@@ -147,6 +164,7 @@ uv run pytest
 
 ## Reproducibility and HPC
 
+- Parallel pocket similarity guide: [docs/pocket-similarity.md](docs/pocket-similarity.md)
 - Reproducibility guide: [docs/reproducibility.md](docs/reproducibility.md)
 - HPC setup: [docs/hpc.md](docs/hpc.md)
 - SLURM templates: `slurm/`
